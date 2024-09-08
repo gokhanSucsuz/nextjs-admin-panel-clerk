@@ -3,6 +3,7 @@ import { SignedIn, UserButton } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
+import AddCategory from "./_components/AddCategory";
 
 import {
 	Table,
@@ -14,6 +15,7 @@ import {
 	TableHeader,
 	TableRow
 } from "@/components/ui/table";
+import UpdateCategory from "./_components/UpdateCategory";
 
 interface CategoryProps {
 	id: string;
@@ -23,6 +25,20 @@ interface CategoryProps {
 
 export default function Home() {
 	const [categories, setCategories] = useState<CategoryProps[] | null>(null);
+	const [
+		selectedCategory,
+		setSelectedCategory
+	] = useState<CategoryProps | null>(null);
+	const [isUpdateModalOpen, setIsUpdateModalOpen] = useState<boolean>(false);
+
+	const deleteCategories = async (id: string) => {
+		try {
+			await axios.delete(`/api/categories/${id}`);
+			fetchCategories();
+		} catch (error) {
+			return new Error("Delete Failed");
+		}
+	};
 	const fetchCategories = async () => {
 		try {
 			const response = await axios.get("/api/categories");
@@ -42,8 +58,15 @@ export default function Home() {
 
 			<div className="container mx-auto">
 				<h1 className="text-3xl mt-4 font-semibold mb-8">Categories</h1>
-				<Button variant={"default"}>Add Category</Button>
 
+				<AddCategory fetchCategories={fetchCategories} />
+				{selectedCategory &&
+					<UpdateCategory
+						category={selectedCategory}
+						isOpen={isUpdateModalOpen}
+						onClose={() => setIsUpdateModalOpen(false)}
+						fetchCategories={fetchCategories}
+					/>}
 				{categories === null
 					? <div>Loading...</div>
 					: <Table>
@@ -53,7 +76,7 @@ export default function Home() {
 									<TableHead className="w-[100px]">ID</TableHead>
 									<TableHead>Title</TableHead>
 									<TableHead>Description</TableHead>
-									<TableHead>#</TableHead>
+									<TableHead>Actions</TableHead>
 								</TableRow>
 							</TableHeader>
 							<TableBody>
@@ -68,7 +91,23 @@ export default function Home() {
 										<TableCell>
 											{category.description}
 										</TableCell>
-										<TableCell />
+										<TableCell className="flex space-x-3">
+											<Button
+												variant={"warning"}
+												onClick={() => {
+													setSelectedCategory(category);
+													setIsUpdateModalOpen(true);
+												}}
+											>
+												Update
+											</Button>
+											<Button
+												variant={"destructive"}
+												onClick={() => deleteCategories(category.id)}
+											>
+												Delete
+											</Button>
+										</TableCell>
 									</TableRow>
 								)}
 							</TableBody>
