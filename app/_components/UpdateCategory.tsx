@@ -73,11 +73,8 @@ export default function UpdateCategory({
 			console.log(error);
 		}
 	};
-	return (
-		<Dialog open={isOpen} onOpenChange={onClose}>
-			<DialogTrigger asChild>
-				<Button variant="warning">Update Category</Button>
-			</DialogTrigger>
+	return <Dialog open={isOpen} onOpenChange={onClose}>
+			<DialogTrigger asChild />
 			<DialogHeader>
 				<DialogTitle />
 				<DialogDescription />
@@ -85,36 +82,25 @@ export default function UpdateCategory({
 			<DialogContent className="sm:max-w-[425px]">
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-						<FormField
-							control={form.control}
-							name="title"
-							render={({ field }) =>
-								<FormItem>
+						<FormField control={form.control} name="title" render={({ field }) => <FormItem>
 									<FormLabel>Title</FormLabel>
 									<FormControl>
 										<Input placeholder="title..." {...field} />
 									</FormControl>
 									<FormMessage />
-								</FormItem>}
-						/>
-						<FormField
-							control={form.control}
-							name="description"
-							render={({ field }) =>
-								<FormItem>
+								</FormItem>} />
+						<FormField control={form.control} name="description" render={({ field }) => <FormItem>
 									<FormLabel>Description</FormLabel>
 									<FormControl>
 										<Input placeholder="description..." {...field} />
 									</FormControl>
 									<FormMessage />
-								</FormItem>}
-						/>
+								</FormItem>} />
 						<DialogClose asChild>
 							<Button type="submit">Submit</Button>
 						</DialogClose>
 					</form>
 				</Form>
 			</DialogContent>
-		</Dialog>
-	);
+		</Dialog>;
 }

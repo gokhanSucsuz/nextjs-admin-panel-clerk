@@ -50,8 +50,7 @@ export default function Home() {
 	useEffect(() => {
 		fetchCategories();
 	}, []);
-	return (
-		<main className="flex flex-col  justify-between p-8">
+	return <main className="flex flex-col  justify-between p-8">
 			<SignedIn>
 				<UserButton signInUrl="/" />
 			</SignedIn>
@@ -60,16 +59,11 @@ export default function Home() {
 				<h1 className="text-3xl mt-4 font-semibold mb-8">Categories</h1>
 
 				<AddCategory fetchCategories={fetchCategories} />
-				{selectedCategory &&
-					<UpdateCategory
-						category={selectedCategory}
-						isOpen={isUpdateModalOpen}
-						onClose={() => setIsUpdateModalOpen(false)}
-						fetchCategories={fetchCategories}
-					/>}
-				{categories === null
-					? <div>Loading...</div>
-					: <Table>
+				{selectedCategory && <UpdateCategory category={selectedCategory} isOpen={isUpdateModalOpen} onClose={() => {
+							setIsUpdateModalOpen(false);
+							setSelectedCategory(null);
+						}} fetchCategories={fetchCategories} />}
+				{categories === null ? <div>Loading...</div> : <Table>
 							<TableCaption>Category List</TableCaption>
 							<TableHeader>
 								<TableRow>
@@ -80,8 +74,7 @@ export default function Home() {
 								</TableRow>
 							</TableHeader>
 							<TableBody>
-								{categories.map(category =>
-									<TableRow key={category.id}>
+								{categories.map(category => <TableRow key={category.id}>
 										<TableCell className="font-medium">
 											{category.id}
 										</TableCell>
@@ -92,27 +85,19 @@ export default function Home() {
 											{category.description}
 										</TableCell>
 										<TableCell className="flex space-x-3">
-											<Button
-												variant={"warning"}
-												onClick={() => {
+											<Button variant={"warning"} onClick={() => {
 													setSelectedCategory(category);
 													setIsUpdateModalOpen(true);
-												}}
-											>
+												}}>
 												Update
 											</Button>
-											<Button
-												variant={"destructive"}
-												onClick={() => deleteCategories(category.id)}
-											>
+											<Button variant={"destructive"} onClick={() => deleteCategories(category.id)}>
 												Delete
 											</Button>
 										</TableCell>
-									</TableRow>
-								)}
+									</TableRow>)}
 							</TableBody>
 						</Table>}
 			</div>
-		</main>
-	);
+		</main>;
 }
