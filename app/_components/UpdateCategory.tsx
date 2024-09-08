@@ -52,11 +52,12 @@ export default function UpdateCategory({
 	isOpen,
 	onClose
 }: UpdateCategoryProps) {
+	const [updateCategory, setUpdateCategory] = useState(category);
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			title: category.title,
-			description: category.description
+			title: updateCategory.title,
+			description: updateCategory.description
 		}
 	});
 
@@ -68,6 +69,7 @@ export default function UpdateCategory({
 			});
 			fetchCategories();
 			onClose();
+			setUpdateCategory(null);
 			form.reset();
 		} catch (error) {
 			console.log(error);

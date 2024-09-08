@@ -61,7 +61,6 @@ export default function Home() {
 				<AddCategory fetchCategories={fetchCategories} />
 				{selectedCategory && <UpdateCategory category={selectedCategory} isOpen={isUpdateModalOpen} onClose={() => {
 							setIsUpdateModalOpen(false);
-							setSelectedCategory(null);
 						}} fetchCategories={fetchCategories} />}
 				{categories === null ? <div>Loading...</div> : <Table>
 							<TableCaption>Category List</TableCaption>
